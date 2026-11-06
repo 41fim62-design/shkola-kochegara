@@ -3,96 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17212f">
 <title>Школа кочегара</title>
 
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;
- background:#101827;
- color:#edf2f7;
+ margin:0;background:#101923;color:#edf2f7;
  font-family:Arial,sans-serif;
 }
 header{
- background:#1e293b;
- padding:22px;
- border-bottom:2px solid #f59e0b;
+ background:#172638;padding:22px 18px;
+ border-bottom:2px solid #e58b32;
 }
-header h1{margin:0;color:#fbbf24}
-header p{color:#cbd5e1;margin-bottom:0}
+header h1{margin:0;font-size:24px}
+header p{color:#aab9c9;margin:8px 0 0}
 main{max-width:850px;margin:auto;padding:15px}
+nav{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:8px;margin-bottom:18px
+}
+nav button{
+ background:#25364a;color:white;padding:13px 5px;
+ border:0;border-radius:9px;font-size:13px
+}
+button{cursor:pointer}
+button.active{background:#e58b32;color:#111}
 .card{
- background:#1e293b;
- padding:18px;
- border-radius:13px;
- margin:12px 0;
+ background:#1c2b3b;padding:17px;
+ border-radius:12px;margin-bottom:13px;
+ border:1px solid #304257;
 }
-button{
- border:0;
- border-radius:9px;
- padding:13px;
- background:#f59e0b;
- color:#111827;
- font-weight:bold;
- cursor:pointer;
+.card h2,.card h3{margin-top:0}
+.card p{line-height:1.6;color:#d0dae5}
+.orange{color:#f4a64c}
+.muted{color:#9aabbc}
+.stat{
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:10px;margin:15px 0
 }
-.menu{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:10px;
- margin:15px 0;
-}
-.menu button{
- background:#334155;
- color:white;
- min-height:65px;
-}
-.menu button:active{background:#f59e0b}
-h2{color:#fbbf24}
-h3{color:#fbbf24}
-small{color:#94a3b8}
+.stat .card{margin:0}
+.number{font-size:28px;color:#f4a64c;font-weight:bold}
 .progress{
- background:#334155;
- height:12px;
- border-radius:10px;
- overflow:hidden;
+ height:9px;background:#34475b;
+ border-radius:10px;overflow:hidden
 }
 .progress div{
- background:#f59e0b;
- height:100%;
- width:0%;
+ height:100%;background:#e58b32;width:0%
 }
-.lesson{
- background:#334155;
- padding:15px;
- border-radius:10px;
- margin:10px 0;
+.action{
+ background:#e58b32;color:#111;border:0;
+ padding:12px 17px;border-radius:8px;
+ font-weight:bold;margin-top:8px
+}
+.secondary{
+ background:#34485e;color:white;border:0;
+ padding:12px;border-radius:8px;margin-top:8px
+}
+.lesson{cursor:pointer}
+.lesson:active{opacity:.7}
+.tag{
+ background:#34475b;padding:5px 9px;
+ border-radius:20px;font-size:12px
 }
 .answer{
- display:block;
- width:100%;
- margin:8px 0;
- text-align:left;
- background:#334155;
- color:white;
+ display:block;width:100%;text-align:left;
+ padding:13px;margin:8px 0;
+ background:#293c50;color:white;
+ border:1px solid #465d74;border-radius:8px
 }
+.answer.correct{background:#176b48}
+.answer.wrong{background:#8c3333}
 input{
- width:100%;
- padding:13px;
- border-radius:8px;
- border:0;
- margin:10px 0;
+ width:100%;padding:12px;border-radius:8px;
+ border:0;margin:10px 0;background:#26384b;color:white
 }
 .hidden{display:none}
-.back{
- background:#64748b;
- color:white;
- margin-bottom:12px;
-}
-footer{
- text-align:center;
- color:#64748b;
- padding:25px;
+footer{text-align:center;color:#8092a5;padding:25px}
+ul{line-height:1.8}
+.warning{
+ border-left:4px solid #e58b32;
+ padding:12px;background:#3a3024;
+ border-radius:5px;line-height:1.6
 }
 </style>
 </head>
@@ -101,260 +93,644 @@ footer{
 
 <header>
 <h1>🔥 ШКОЛА КОЧЕГАРА</h1>
-<p>Профессиональное обучение оператора котельной</p>
+<p>Профессиональное обучение работе в котельной</p>
 </header>
 
 <main>
 
-<div id="home">
+<nav>
+<button class="active" onclick="page('home',this)">🏠 Главная</button>
+<button onclick="page('lessons',this)">📚 Уроки</button>
+<button onclick="page('tests',this)">📝 Тесты</button>
+<button onclick="page('equipment',this)">⚙️ Оборудование</button>
+<button onclick="page('safety',this)">🚨 Безопасность</button>
+<button onclick="page('dictionary',this)">📖 Словарь</button>
+</nav>
+
+<section id="home">
 
 <div class="card">
-<h2>Твой учебный прогресс</h2>
-<p>Пройдено уроков: <b id="done">0</b></p>
+<h2>Добро пожаловать!</h2>
+<p>Изучай устройство котельной, принципы работы оборудования, автоматику и диагностику неисправностей.</p>
+<p class="orange">Твоя цель: стать специалистом, который понимает каждый процесс в котельной.</p>
+</div>
+
+<div class="stat">
+<div class="card">
+<div class="muted">Пройдено уроков</div>
+<div class="number" id="done">0</div>
+</div>
+<div class="card">
+<div class="muted">Результат тестов</div>
+<div class="number" id="score">0</div>
+</div>
+</div>
+
+<div class="card">
+<h3>Твой прогресс</h3>
 <div class="progress"><div id="bar"></div></div>
 <p id="percent">0% обучения</p>
 </div>
 
-<h2>Учебные разделы</h2>
+<div class="card">
+<h3>🎓 Следующий урок</h3>
+<p id="nextLesson">Устройство водогрейного котла</p>
+<button class="action" onclick="openNext()">НАЧАТЬ ОБУЧЕНИЕ</button>
+</div>
 
-<div class="menu">
-<button onclick="openSection('basics')">🏭 Устройство котельной</button>
-<button onclick="openSection('fuel')">🔥 Топливо и горение</button>
-<button onclick="openSection('equipment')">⚙️ Оборудование</button>
-<button onclick="openSection('automation')">💻 Автоматика</button>
-<button onclick="openSection('safety')">🚨 Безопасность</button>
-<button onclick="openSection('problems')">🔧 Неисправности</button>
-<button onclick="openSection('exam')">📝 Экзамен</button>
-<button onclick="openSection('dictionary')">📖 Словарь</button>
+</section>
+
+<section id="lessons" class="hidden">
+<h2>📚 Учебная программа</h2>
+<div id="lessonList"></div>
+</section>
+
+<section id="reader" class="hidden">
+<button class="secondary" onclick="page('lessons')">← Назад к урокам</button>
+<div class="card">
+<h2 id="lessonTitle"></h2>
+<div id="lessonText"></div>
+<button class="action" onclick="completeLesson()">ОТМЕТИТЬ КАК ПРОЙДЕННЫЙ ✓</button>
+</div>
+</section>
+
+<section id="tests" class="hidden">
+<h2>📝 Проверка знаний</h2>
+<div class="card">
+<h3 id="questionTitle">Готов проверить свои знания?</h3>
+<div id="question"></div>
+<div id="answers"></div>
+<div id="result"></div>
+<button class="action" id="nextQuestion" onclick="nextQ()" style="display:none">СЛЕДУЮЩИЙ ВОПРОС</button>
+</div>
+</section>
+
+<section id="equipment" class="hidden">
+<h2>⚙️ Оборудование котельной</h2>
+<div id="equipmentList"></div>
+</section>
+
+<section id="safety" class="hidden">
+<h2>🚨 Безопасность</h2>
+
+<div class="card">
+<h3>Главное правило</h3>
+<div class="warning">
+При неисправности оборудования нельзя самовольно отключать защиты, блокировки и сигнализацию. Действуй по производственной инструкции и сообщай ответственному персоналу.
+</div>
 </div>
 
 <div class="card">
-<h3>🎯 Твоя цель</h3>
-<p>Стать грамотным специалистом, который понимает устройство котельной, принципы её работы и умеет распознавать неисправности.</p>
+<h3>Что важно знать</h3>
+<ul>
+<li>Порядок безопасного пуска и остановки определяется инструкцией конкретного котла.</li>
+<li>Нельзя работать с неисправными защитными устройствами.</li>
+<li>Нельзя самостоятельно изменять настройки автоматики.</li>
+<li>При угрозе аварии действуй по аварийной инструкции.</li>
+<li>При появлении дыма, запаха гари или признаков пожара немедленно сообщай ответственному персоналу.</li>
+<li>Работы с электрооборудованием выполняются только допущенным персоналом.</li>
+</ul>
 </div>
 
+<div class="card">
+<h3>Помни</h3>
+<p>Этот раздел предназначен для обучения. Он не заменяет производственные инструкции, режимные карты и документацию изготовителя.</p>
 </div>
+</section>
 
-<div id="content" class="hidden">
-<button class="back" onclick="home()">← На главную</button>
-<h2 id="sectionTitle"></h2>
-<div id="sectionContent"></div>
-</div>
+<section id="dictionary" class="hidden">
+<h2>📖 Словарь кочегара</h2>
+<input id="dictSearch" placeholder="Поиск термина..." oninput="renderDict()">
+<div id="dictList"></div>
+</section>
 
 </main>
 
 <footer>
-Школа кочегара · Учись понимать свою котельную
+Школа кочегара · Учись понимать оборудование 🔥
 </footer>
 
 <script>
 
-const lessons={
+const lessons=[
 
-basics:{
-title:"🏭 Устройство котельной",
-items:[
-["Что такое котельная",
-"Котельная — это комплекс оборудования, предназначенный для получения и передачи тепловой энергии теплоносителю. В водогрейной котельной нагревается вода, которая затем направляется потребителям."],
-["Водогрейный котёл",
-"Водогрейный котёл передаёт теплоту от сгорающего топлива воде. Основные элементы зависят от конструкции: топочная камера, поверхности нагрева, водяной тракт, газоходы и система удаления продуктов сгорания."],
-["Циркуляция воды",
-"Циркуляция обеспечивает движение теплоносителя через котёл и систему отопления. Для её поддержания применяются насосы. Нарушение циркуляции может привести к опасному перегреву оборудования."],
-["Тепловой баланс",
-"Тепловой баланс показывает, куда расходуется энергия топлива: на нагрев воды, потери с уходящими газами, химическую и механическую неполноту сгорания и другие потери."]
-]},
+{
+title:"1. Что такое водогрейный котёл",
+text:`
+<h3>Цель урока</h3>
+Понять назначение водогрейного котла.
 
-fuel:{
-title:"🔥 Топливо и горение",
-items:[
-["Что такое горение",
-"Горение — это химическая реакция окисления топлива с выделением теплоты. Для устойчивого процесса необходимы горючее вещество, окислитель и достаточная температура."],
-["Каменный уголь",
-"Уголь содержит горючую часть, влагу, минеральные примеси и золу. Его характеристики влияют на теплотворность, расход топлива, количество золы и особенности горения."],
-["Первичный воздух",
-"Первичный воздух поступает в зону горения топлива. Его распределение и количество зависят от конструкции топки."],
-["Вторичный воздух",
-"Вторичный воздух участвует в дожигании летучих горючих компонентов. Конкретная схема подачи определяется конструкцией котла."],
-["Шлак и зола",
-"Зола представляет собой минеральный остаток после сгорания. Шлак образуется при спекании и плавлении минеральных компонентов топлива."]
-]},
+<h3>Принцип работы</h3>
+Водогрейный котёл представляет собой теплообменное устройство. Его задача — передавать тепло от продуктов сгорания топлива воде.
 
-equipment:{
-title:"⚙️ Оборудование",
-items:[
-["Дутьевой вентилятор",
-"Подаёт воздух для процесса горения. Контролируются состояние вентилятора, электродвигателя, подшипников, воздуховодов и предусмотренных системой защит."],
-["Дымосос",
-"Обеспечивает удаление дымовых газов и участвует в создании необходимого разрежения в газовом тракте."],
-["Насос",
-"Обеспечивает перемещение воды по трубопроводам. Важные характеристики: производительность, напор, мощность и состояние оборудования."],
-["Транспортёр топлива",
-"Перемещает топливо к месту сжигания. Важны состояние ленты или цепи, приводов, роликов и защитных устройств."],
-["Система золоудаления",
-"Предназначена для удаления золы и шлака. Конструкция зависит от типа котельной и установленного оборудования."]
-]},
+Основные процессы:
+<ul>
+<li>Сжигание топлива.</li>
+<li>Образование горячих продуктов сгорания.</li>
+<li>Передача тепла через поверхности нагрева.</li>
+<li>Нагрев воды.</li>
+<li>Отвод дымовых газов.</li>
+</ul>
 
-automation:{
-title:"💻 Автоматика",
-items:[
-["Датчики температуры",
-"Измеряют температуру воды, газов и других сред. Показания используются системой контроля и регулирования."],
-["Датчики давления",
-"Контролируют давление в трубопроводах и оборудовании."],
-["Частотный преобразователь",
-"Изменяет частоту питания электродвигателя, позволяя регулировать скорость его вращения."],
-["Аварийная сигнализация",
-"Предупреждает персонал о выходе контролируемых параметров за установленные пределы или неисправностях."],
-["Блокировки",
-"Не позволяют выполнять определённые операции при наличии опасных условий. Самовольное отключение блокировок недопустимо."]
-]},
+<h3>Основные части</h3>
+<ul>
+<li>Топочная камера.</li>
+<li>Поверхности нагрева.</li>
+<li>Водяной контур.</li>
+<li>Газоходы.</li>
+<li>Система удаления золы.</li>
+<li>Контрольно-измерительные приборы.</li>
+</ul>
 
-safety:{
-title:"🚨 Охрана труда и безопасность",
-items:[
-["Средства индивидуальной защиты",
-"Используются спецодежда, защитная обувь, каска, перчатки, очки и другие СИЗ согласно оценке рисков и требованиям предприятия."],
-["Угарный газ",
-"Угарный газ CO не имеет цвета и запаха. Он крайне токсичен. При подозрении на его присутствие необходимо действовать по аварийному плану предприятия и не подвергать себя опасности."],
-["Работа с вращающимися механизмами",
-"Запрещается снимать ограждения или приближаться к движущимся частям. Ремонт и очистка выполняются после безопасной остановки, изоляции источников энергии и оформления допуска, если он требуется."],
-["Аварийная ситуация",
-"При угрозе жизни, пожаре, утечке или отказе защит необходимо действовать по утверждённым инструкциям, сообщить ответственному лицу и вызвать экстренные службы при необходимости."]
-]},
+<div class="warning">Конструкция и расположение элементов зависят от модели котла.</div>
 
-problems:{
-title:"🔧 Диагностика неисправностей",
-items:[
-["Частотник показывает ошибку",
-"Запиши точный код ошибки, модель преобразователя и обстоятельства появления. Сверь код с руководством производителя. Не сбрасывай защиту без выяснения причины."],
-["Перегрев электродвигателя",
-"Возможные причины: перегрузка, нарушение охлаждения, неисправность подшипников, проблемы питания. Диагностику должен выполнять квалифицированный персонал."],
-["Падение давления воды",
-"Возможные причины: утечка, нарушение подпитки, неисправность насоса или датчика. Необходимо руководствоваться аварийной инструкцией конкретной котельной."],
-["Нарушение тяги",
-"Возможные причины: засорение газохода, неисправность дымососа, нарушение герметичности или проблемы с датчиками. Эксплуатацию при опасных параметрах необходимо прекратить согласно инструкции."]
-]},
+<h3>Проверь себя</h3>
+Почему котёл называют водогрейным?
 
-dictionary:{
-title:"📖 Профессиональный словарь",
-items:[
-["Тяга","Движение дымовых газов под действием разности давлений."],
-["Разрежение","Давление ниже атмосферного."],
-["КПД","Отношение полезно использованной энергии к затраченной."],
-["Теплотворность","Количество теплоты, выделяемое при полном сгорании единицы топлива."],
-["Колосниковая решётка","Элемент топочного устройства, поддерживающий слой твёрдого топлива."],
-["Золоудаление","Процесс удаления золы из котельного оборудования."],
-["Частотник","Разговорное название частотного преобразователя."],
-["Теплоноситель","Среда, переносящая тепловую энергию, например вода."]
-]}
-};
+Потому что основная задача такого котла — нагрев воды.
+`
+},
 
-let completed=JSON.parse(localStorage.getItem("schoolDone")||"[]");
+{
+title:"2. Твёрдое топливо и его свойства",
+text:`
+<h3>Что относится к твёрдому топливу?</h3>
+<ul>
+<li>Каменный уголь.</li>
+<li>Бурый уголь.</li>
+<li>Древесина.</li>
+<li>Топливные брикеты.</li>
+</ul>
 
-function updateProgress(){
-let total=Object.values(lessons).reduce((a,s)=>a+s.items.length,0);
-let count=completed.length;
-document.getElementById("done").innerText=count;
-document.getElementById("bar").style.width=(count/total*100)+"%";
-document.getElementById("percent").innerText=Math.round(count/total*100)+"% обучения";
+<h3>Основные характеристики топлива</h3>
+<b>Влажность</b> — содержание воды в топливе.
+
+<b>Зольность</b> — количество минерального остатка после сгорания.
+
+<b>Теплотворная способность</b> — количество теплоты, выделяемое при сгорании.
+
+<b>Размер кусков</b> — влияет на особенности подачи и горения.
+
+<h3>Почему это важно?</h3>
+Различия в качестве топлива влияют на устойчивость горения, количество золы и эффективность работы котла.
+
+Конкретные требования к топливу устанавливаются документацией котла и режимной картой.
+`
+},
+
+{
+title:"3. Процесс горения",
+text:`
+<h3>Что такое горение?</h3>
+Горение — химическая реакция окисления топлива с выделением тепла.
+
+Для горения необходимы:
+<ul>
+<li>Горючее вещество.</li>
+<li>Окислитель, обычно кислород воздуха.</li>
+<li>Источник воспламенения.</li>
+</ul>
+
+<h3>Три составляющие</h3>
+1. Топливо.
+
+2. Кислород.
+
+3. Температура, достаточная для поддержания реакции.
+
+<h3>Что влияет на горение?</h3>
+Влажность топлива, его фракционный состав, подача воздуха и условия в топочной камере.
+
+<h3>Важно</h3>
+Недостаток или избыток воздуха могут ухудшать эффективность сгорания. Рабочие настройки определяются режимной картой конкретного котла.
+`
+},
+
+{
+title:"4. Тяга в котельной",
+text:`
+<h3>Что такое тяга?</h3>
+Тяга — движение дымовых газов по газоходам под действием разности давлений.
+
+<h3>Для чего она нужна?</h3>
+Для организованного отвода продуктов сгорания и обеспечения предусмотренного проектом движения газов.
+
+<h3>Что влияет на тягу?</h3>
+<ul>
+<li>Температура дымовых газов.</li>
+<li>Состояние дымовой трубы.</li>
+<li>Сопротивление газоходов.</li>
+<li>Работа дымососа, если он предусмотрен.</li>
+</ul>
+
+<h3>Признаки проблем</h3>
+Изменение показаний приборов, нестабильная работа оборудования, появление дыма вне предусмотренных газоходов.
+
+При таких признаках действуй по инструкции и сообщай ответственному персоналу.
+`
+},
+
+{
+title:"5. Насосы котельной",
+text:`
+<h3>Назначение насоса</h3>
+Насос обеспечивает движение воды в системе.
+
+<h3>Основные элементы</h3>
+<ul>
+<li>Электродвигатель.</li>
+<li>Рабочее колесо.</li>
+<li>Корпус.</li>
+<li>Входной и выходной патрубки.</li>
+<li>Подшипниковые узлы.</li>
+</ul>
+
+<h3>На что обращают внимание?</h3>
+<ul>
+<li>Посторонний шум.</li>
+<li>Вибрация.</li>
+<li>Наличие протечек.</li>
+<li>Показания приборов.</li>
+<li>Сигналы автоматики.</li>
+</ul>
+
+Неисправности и порядок переключения насосов определяются инструкцией оборудования.
+`
+},
+
+{
+title:"6. Вентиляторы и дымососы",
+text:`
+<h3>Вентилятор</h3>
+Перемещает воздух, необходимый для работы топочной системы.
+
+<h3>Дымосос</h3>
+Предназначен для перемещения дымовых газов по предусмотренной газовоздушной системе.
+
+<h3>Основные элементы</h3>
+<ul>
+<li>Электродвигатель.</li>
+<li>Рабочее колесо.</li>
+<li>Корпус.</li>
+<li>Подшипники.</li>
+</ul>
+
+<h3>Возможные признаки неисправности</h3>
+Вибрация, посторонний шум, перегрев, изменение рабочих параметров, аварийные сигналы.
+
+Не обходи блокировки и не запускай неисправное оборудование самостоятельно.
+`
+},
+
+{
+title:"7. Частотные преобразователи",
+text:`
+<h3>Что такое частотник?</h3>
+Частотный преобразователь управляет скоростью вращения электродвигателя посредством изменения частоты питания.
+
+<h3>Где используется?</h3>
+<ul>
+<li>На насосах.</li>
+<li>На вентиляторах.</li>
+<li>На дымососах.</li>
+<li>На транспортёрах.</li>
+</ul>
+
+<h3>Почему возникают ошибки?</h3>
+Возможные причины:
+<ul>
+<li>Перегрузка.</li>
+<li>Перегрев.</li>
+<li>Проблемы с питанием.</li>
+<li>Неисправность двигателя.</li>
+<li>Срабатывание защит.</li>
+</ul>
+
+Код ошибки необходимо сверять с руководством конкретного преобразователя.
+
+Не сбрасывай аварию многократно без выяснения причины.
+`
+},
+
+{
+title:"8. Контрольно-измерительные приборы",
+text:`
+<h3>Для чего нужны приборы?</h3>
+Они помогают контролировать состояние оборудования и параметры технологического процесса.
+
+<h3>Основные приборы</h3>
+<ul>
+<li>Термометры — измеряют температуру.</li>
+<li>Манометры — измеряют давление.</li>
+<li>Датчики температуры — передают сигнал автоматике.</li>
+<li>Датчики давления — контролируют давление.</li>
+<li>Газоанализаторы — измеряют состав газовой среды.</li>
+</ul>
+
+<h3>Главное</h3>
+Показания нужно оценивать в соответствии с рабочими пределами, указанными в документации и производственных инструкциях.
+`
+},
+
+{
+title:"9. Система подачи угля",
+text:`
+<h3>Назначение</h3>
+Система подачи топлива обеспечивает транспортировку угля к месту сжигания.
+
+<h3>Возможные элементы</h3>
+<ul>
+<li>Бункер.</li>
+<li>Питатель.</li>
+<li>Ленточный транспортёр.</li>
+<li>Привод.</li>
+<li>Натяжное устройство.</li>
+</ul>
+
+<h3>Что контролировать?</h3>
+Состояние ленты, работу привода, посторонние шумы, наличие просыпей и сигналы защит.
+
+Не очищай движущиеся механизмы во время работы. Перед обслуживанием необходимо безопасное отключение по установленной процедуре.
+`
+},
+
+{
+title:"10. Золоудаление",
+text:`
+<h3>Что такое зола?</h3>
+Зола — минеральный остаток, образующийся после сгорания топлива.
+
+<h3>Для чего нужна система золоудаления?</h3>
+Для удаления золы и шлака из предусмотренных конструкцией зон котельной установки.
+
+<h3>Что важно контролировать?</h3>
+<ul>
+<li>Работу механизмов.</li>
+<li>Отсутствие опасных скоплений золы.</li>
+<li>Состояние оборудования.</li>
+<li>Температуру и признаки перегрева.</li>
+</ul>
+
+Зола может сохранять высокую температуру. Необходимо соблюдать правила обращения с горячими отходами.
+`
+},
+
+{
+title:"11. Автоматика котла",
+text:`
+<h3>Назначение автоматики</h3>
+Автоматика контролирует параметры оборудования и управляет предусмотренными технологическими процессами.
+
+<h3>Что может входить в систему?</h3>
+<ul>
+<li>Контроллер.</li>
+<li>Датчики температуры.</li>
+<li>Датчики давления.</li>
+<li>Исполнительные механизмы.</li>
+<li>Сигнализация.</li>
+<li>Защитные блокировки.</li>
+</ul>
+
+<h3>Важно понимать</h3>
+Автоматика не отменяет обязанности оператора контролировать оборудование.
+
+Запрещается самовольно изменять уставки или отключать защитные функции.
+`
+},
+
+{
+title:"12. Аварийные ситуации",
+text:`
+<h3>Что такое аварийная ситуация?</h3>
+Это опасное нарушение нормальной работы оборудования или технологического процесса.
+
+<h3>Возможные признаки</h3>
+<ul>
+<li>Резкое изменение контролируемых параметров.</li>
+<li>Срабатывание аварийной сигнализации.</li>
+<li>Потеря предусмотренной циркуляции воды.</li>
+<li>Неисправность дымоудаления.</li>
+<li>Пожар или задымление.</li>
+</ul>
+
+<h3>Основной принцип</h3>
+Не пытайся экспериментировать с оборудованием.
+
+Действуй по аварийной инструкции, используй предусмотренные средства оповещения и сообщай ответственному персоналу.
+`
 }
 
-function home(){
-document.getElementById("home").classList.remove("hidden");
-document.getElementById("content").classList.add("hidden");
-updateProgress();
-}
-
-function openSection(key){
-let section=lessons[key];
-document.getElementById("home").classList.add("hidden");
-document.getElementById("content").classList.remove("hidden");
-document.getElementById("sectionTitle").innerText=section.title;
-
-let html="";
-
-if(key==="exam"){
-html=`
-<div class="card">
-<h3>Проверка знаний</h3>
-<p>Ответь на вопросы и проверь свои знания.</p>
-<button onclick="startExam()" style="width:100%">НАЧАТЬ ЭКЗАМЕН</button>
-<div id="examArea"></div>
-</div>`;
-}else{
-section.items.forEach((item,i)=>{
-let id=key+"_"+i;
-html+=`
-<div class="lesson">
-<h3>${item[0]}</h3>
-<p>${item[1]}</p>
-${completed.includes(id)
-?'<button disabled>✓ Изучено</button>'
-:`<button onclick="markDone('${id}',this)">Отметить изученным</button>`}
-</div>`;
-});
-}
-
-document.getElementById("sectionContent").innerHTML=html;
-}
-
-function markDone(id,button){
-if(!completed.includes(id)){
-completed.push(id);
-localStorage.setItem("schoolDone",JSON.stringify(completed));
-button.innerText="✓ Изучено";
-button.disabled=true;
-updateProgress();
-}
-}
-
-const questions=[
-["Что обеспечивает циркуляцию воды в системе?","Насос","Дымосос","Транспортёр",0],
-["Для чего нужен дутьевой вентилятор?","Для подачи воздуха","Для нагрева воды","Для удаления золы",0],
-["Что такое CO?","Углекислый газ","Угарный газ","Кислород",1],
-["Для чего нужен частотный преобразователь?","Изменение скорости двигателя","Измерение температуры","Очистка воды",0],
-["Что такое КПД?","Коэффициент полезного действия","Контроль давления","Количество топлива",0],
-["Что следует сделать при появлении аварийной ошибки?","Отключить защиту","Игнорировать","Действовать по инструкции и выяснить причину",2],
-["Что такое разрежение?","Давление ниже атмосферного","Высокая температура","Расход воды",0]
 ];
 
-let current=0;
-let score=0;
+const equipment=[
+["Водогрейный котёл","Нагревает воду за счёт передачи тепла от продуктов сгорания."],
+["Насос","Обеспечивает движение воды в системе."],
+["Вентилятор","Обеспечивает подачу воздуха."],
+["Дымосос","Обеспечивает перемещение дымовых газов."],
+["Транспортёр","Перемещает твёрдое топливо."],
+["Частотный преобразователь","Управляет скоростью электродвигателя."],
+["Контроллер","Обрабатывает сигналы датчиков и управляет системой."],
+["Манометр","Измеряет давление."],
+["Термометр","Измеряет температуру."]
+];
 
-function startExam(){
-current=0;
-score=0;
+const dictionary=[
+["Котёл","Устройство для нагрева теплоносителя."],
+["Теплоноситель","Среда, переносящая тепло. В водогрейном котле это вода."],
+["Тяга","Движение газов вследствие разности давлений."],
+["Топка","Камера или зона сжигания топлива."],
+["Зола","Минеральный остаток после сгорания."],
+["Шлак","Спёкшийся остаток минеральных компонентов топлива."],
+["Манометр","Прибор для измерения давления."],
+["Термометр","Прибор для измерения температуры."],
+["Частотник","Разговорное название частотного преобразователя."],
+["Блокировка","Функция, предотвращающая определённое действие при заданных условиях."],
+["Уставка","Заданное значение параметра системы управления."],
+["Дымосос","Механизм перемещения дымовых газов."],
+["Вентилятор","Механизм перемещения воздуха."]
+];
+
+const questions=[
+{
+q:"Для чего предназначен водогрейный котёл?",
+a:["Для нагрева воды","Для производства электричества","Для хранения угля"],
+c:0
+},
+{
+q:"Что необходимо для горения?",
+a:["Только уголь","Топливо, кислород и достаточная температура","Только высокая температура"],
+c:1
+},
+{
+q:"Что измеряет манометр?",
+a:["Температуру","Скорость","Давление"],
+c:2
+},
+{
+q:"Для чего нужен насос?",
+a:["Для движения воды","Для удаления золы","Для подачи угля"],
+c:0
+},
+{
+q:"Что делает частотный преобразователь?",
+a:["Измеряет температуру","Управляет скоростью двигателя","Очищает воду"],
+c:1
+},
+{
+q:"Что измеряет термометр?",
+a:["Давление","Мощность","Температуру"],
+c:2
+},
+{
+q:"Что делать при аварийном сигнале?",
+a:["Отключить защиту","Игнорировать сигнал","Действовать по инструкции и сообщить ответственному"],
+c:2
+},
+{
+q:"Что такое зольность?",
+a:["Содержание минерального остатка в топливе","Температура угля","Скорость ленты"],
+c:0
+},
+{
+q:"Для чего предназначен дымосос?",
+a:["Для подачи воды","Для перемещения дымовых газов","Для подачи угля"],
+c:1
+},
+{
+q:"Можно ли самовольно отключать защитные блокировки?",
+a:["Да","Нет","Только ночью"],
+c:1
+}
+];
+
+let completed=JSON.parse(localStorage.getItem("schoolDone")||"[]");
+let best=Number(localStorage.getItem("schoolScore")||0);
+let current=0;
+let qi=0;
+let points=0;
+let locked=false;
+
+function page(id,btn){
+document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+if(btn)btn.classList.add("active");
+if(id==="home")updateHome();
+}
+
+function renderLessons(){
+document.getElementById("lessonList").innerHTML=lessons.map((l,i)=>`
+<div class="card lesson" onclick="openLesson(${i})">
+<h3>${l.title}</h3>
+<span class="tag">${completed.includes(i)?"✓ Пройдено":"Не пройдено"}</span>
+</div>`).join("");
+}
+
+function openLesson(i){
+current=i;
+document.getElementById("lessonTitle").innerText=lessons[i].title;
+document.getElementById("lessonText").innerHTML=lessons[i].text;
+page("reader");
+}
+
+function completeLesson(){
+if(!completed.includes(current)){
+completed.push(current);
+localStorage.setItem("schoolDone",JSON.stringify(completed));
+}
+renderLessons();
+updateHome();
+page("lessons");
+}
+
+function openNext(){
+let i=lessons.findIndex((l,index)=>!completed.includes(index));
+openLesson(i<0?0:i);
+}
+
+function updateHome(){
+document.getElementById("done").innerText=completed.length;
+document.getElementById("score").innerText=best;
+let p=Math.round(completed.length/lessons.length*100);
+document.getElementById("bar").style.width=p+"%";
+document.getElementById("percent").innerText=p+"% обучения";
+let i=lessons.findIndex((l,index)=>!completed.includes(index));
+document.getElementById("nextLesson").innerText=i<0?"Все уроки пройдены!":lessons[i].title;
+}
+
+function renderEquipment(){
+document.getElementById("equipmentList").innerHTML=equipment.map(e=>`
+<div class="card"><h3>${e[0]}</h3><p>${e[1]}</p></div>`).join("");
+}
+
+function renderDict(){
+let q=document.getElementById("dictSearch").value.toLowerCase();
+document.getElementById("dictList").innerHTML=dictionary
+.filter(d=>(d[0]+" "+d[1]).toLowerCase().includes(q))
+.map(d=>`<div class="card"><b class="orange">${d[0]}</b><p>${d[1]}</p></div>`).join("");
+}
+
+function startTest(){
+qi=0;
+points=0;
+locked=false;
 showQuestion();
 }
 
 function showQuestion(){
-let area=document.getElementById("examArea");
-if(current>=questions.length){
-area.innerHTML=`
-<h3>Экзамен завершён!</h3>
-<p>Правильных ответов: ${score} из ${questions.length}</p>
-<p>${score>=6?"Отличный результат!":"Нужно повторить материал."}</p>
-<button onclick="startExam()">Пройти ещё раз</button>`;
+locked=false;
+document.getElementById("result").innerHTML="";
+document.getElementById("nextQuestion").style.display="none";
+
+if(qi>=questions.length){
+best=Math.max(best,points);
+localStorage.setItem("schoolScore",best);
+document.getElementById("questionTitle").innerText="Тест завершён!";
+document.getElementById("question").innerHTML=`<h2 class="orange">${points} из ${questions.length}</h2><p>Правильных ответов</p>`;
+document.getElementById("answers").innerHTML="";
+document.getElementById("nextQuestion").innerText="ПРОЙТИ ЕЩЁ РАЗ";
+document.getElementById("nextQuestion").style.display="block";
+document.getElementById("nextQuestion").onclick=startTest;
+updateHome();
 return;
 }
 
-let q=questions[current];
-area.innerHTML=`
-<h3>Вопрос ${current+1} из ${questions.length}</h3>
-<p>${q[0]}</p>
-${[q[1],q[2],q[3]].map((a,i)=>
-`<button class="answer" onclick="answer(${i})">${a}</button>`
-).join("")}
-`;
+let q=questions[qi];
+document.getElementById("questionTitle").innerText="Вопрос "+(qi+1)+" из "+questions.length;
+document.getElementById("question").innerText=q.q;
+document.getElementById("answers").innerHTML=q.a.map((a,i)=>`
+<button class="answer" onclick="checkAnswer(${i},this)">${a}</button>`).join("");
+document.getElementById("nextQuestion").innerText="СЛЕДУЮЩИЙ ВОПРОС";
+document.getElementById("nextQuestion").onclick=nextQ;
 }
 
-function answer(n){
-if(n===questions[current][4])score++;
-current++;
+function checkAnswer(i,btn){
+if(locked)return;
+locked=true;
+let q=questions[qi];
+let buttons=document.querySelectorAll(".answer");
+buttons[q.c].classList.add("correct");
+
+if(i===q.c){
+points++;
+document.getElementById("result").innerHTML='<p style="color:#48d597">✓ Правильно!</p>';
+}else{
+btn.classList.add("wrong");
+document.getElementById("result").innerHTML='<p style="color:#ff9d9d">✗ Неправильно. Правильный ответ выделен зелёным.</p>';
+}
+document.getElementById("nextQuestion").style.display="block";
+}
+
+function nextQ(){
+qi++;
 showQuestion();
 }
 
-updateProgress();
+renderLessons();
+renderEquipment();
+renderDict();
+updateHome();
+startTest();
 
 </script>
 </body>
