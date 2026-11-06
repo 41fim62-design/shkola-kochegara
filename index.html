@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garment Workshop</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f1f4f9;color:#222}
+header{background:#172554;color:white;padding:22px}
+header h2{margin:0}
+header p{margin:6px 0 0;color:#bfdbfe}
+.container{padding:15px;max-width:900px;margin:auto}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.card{background:white;padding:17px;border-radius:12px;box-shadow:0 2px 8px #0001}
+.card small{color:#64748b}
+.card h2{margin:10px 0 0;color:#1d4ed8}
+button{border:0;padding:12px;border-radius:8px;background:#2563eb;color:white;font-weight:bold;cursor:pointer}
+button:active{opacity:.7}
+.add{width:100%;margin:15px 0}
+input,select{width:100%;padding:13px;margin:7px 0 13px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
+label{font-size:13px;font-weight:bold}
+.order{background:white;padding:15px;border-radius:10px;margin:10px 0;box-shadow:0 2px 6px #0001}
+.order h3{margin:0 0 8px}
+.badge{display:inline-block;background:#dbeafe;color:#1e40af;padding:5px 9px;border-radius:15px;font-size:12px}
+.delete{background:#dc2626;margin-top:10px}
+.edit{background:#475569;margin-top:10px;margin-left:5px}
+.hidden{display:none}
+.section{margin-top:20px}
+h3.title{margin-bottom:10px}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>🧵 Garment Workshop</h2>
+<p>Order & Delivery Management</p>
+</header>
+
+<div class="container">
+
+<div class="stats">
+<div class="card">
+<small>Total Orders</small>
+<h2 id="total">0</h2>
+</div>
+<div class="card">
+<small>In Production</small>
+<h2 id="production">0</h2>
+</div>
+<div class="card">
+<small>Completed</small>
+<h2 id="completed">0</h2>
+</div>
+<div class="card">
+<small>Delivered</small>
+<h2 id="delivered">0</h2>
+</div>
+</div>
+
+<button class="add" onclick="showForm()">+ ADD NEW ORDER</button>
+
+<div id="form" class="card hidden">
+<h3 id="formTitle">New Order</h3>
+
+<label>Customer Name</label>
+<input id="customer" placeholder="Customer name">
+
+<label>Order Number</label>
+<input id="number" placeholder="Order number">
+
+<label>Product</label>
+<input id="product" placeholder="T-shirt, trousers, etc.">
+
+<label>Quantity</label>
+<input id="quantity" type="number" min="1" placeholder="Quantity">
+
+<label>Order Date</label>
+<input id="date" type="date">
+
+<label>Delivery Date</label>
+<input id="deliveryDate" type="date">
+
+<label>Payment Amount</label>
+<input id="payment" type="number" min="0" placeholder="Amount">
+
+<label>Status</label>
+<select id="status">
+<option>New</option>
+<option>In Production</option>
+<option>Completed</option>
+<option>Delivered</option>
+</select>
+
+<button onclick="saveOrder()" style="width:100%">SAVE ORDER</button>
+<button onclick="hideForm()" style="width:100%;background:#64748b;margin-top:8px">CANCEL</button>
+</div>
+
+<div class="section">
+<h3 class="title">📋 Orders</h3>
+<input id="search" placeholder="🔍 Search orders..." oninput="render()">
+<select id="filter" onchange="render()">
+<option value="">All orders</option>
+<option>New</option>
+<option>In Production</option>
+<option>Completed</option>
+<option>Delivered</option>
+</select>
+<div id="orders"></div>
+</div>
+
+</div>
+
+<script>
+let data=JSON.parse(localStorage.getItem("garmentOrders")||"[]");
+let editing=null;
+
+function save(){
+localStorage.setItem("garmentOrders",JSON.stringify(data));
+}
+
+function showForm(){
+editing=null;
+clearForm();
+document.getElementById("formTitle").innerText="New Order";
+document.getElementById("form").classList.remove("hidden");
+}
+
+function hideForm(){
+document.getElementById("form").classList.add("hidden");
+}
+
+function clearForm(){
+["customer","number","product","quantity","date","deliveryDate","payment"].forEach(id=>{
+document.getElementById(id).value="";
+});
+document.getElementById("status").value="New";
+}
+
+function saveOrder(){
+let customer=document.getElementById("customer").value.trim();
+let number=document.getElementById("number").value.trim();
+let product=document.getElementById("product").value.trim();
+let quantity=Number(document.getElementById("quantity").value);
+
+if(!customer||!number||!product||quantity<=0){
+alert("Please fill in all required fields!");
+return;
+}
+
+let order={
+id:editing!==null?editing:Date.now(),
+customer,
+number,
+product,
+quantity,
+date:document.getElementById("date").value,
+deliveryDate:document.getElementById("deliveryDate").value,
+payment:Number(document.getElementById("payment").value)||0,
+status:document.getElementById("status").value
+};
+
+if(editing!==null){
+let index=data.findIndex(x=>x.id===editing);
+data[index]=order;
+}else{
+data.unshift(order);
+}
+
+save();
+render();
+hideForm();
+clearForm();
+}
+
+function editOrder(id){
+let o=data.find(x=>x.id===id);
+if(!o)return;
+editing=id;
+document.getElementById("formTitle").innerText="Edit Order";
+["customer","number","product","quantity","date","deliveryDate","payment","status"].forEach((key)=>{
+let field=key==="deliveryDate"?"deliveryDate":key;
+document.getElementById(field).value=o[key]??"";
+});
+document.getElementById("form").classList.remove("hidden");
+window.scrollTo(0,0);
+}
+
+function deleteOrder(id){
+if(confirm("Delete this order?")){
+data=data.filter(x=>x.id!==id);
+save();
+render();
+}
+}
+
+function render(){
+let search=document.getElementById("search").value.toLowerCase();
+let filter=document.getElementById("filter").value;
+
+document.getElementById("total").innerText=data.length;
+document.getElementById("production").innerText=data.filter(x=>x.status==="In Production").length;
+document.getElementById("completed").innerText=data.filter(x=>x.status==="Completed").length;
+document.getElementById("delivered").innerText=data.filter(x=>x.status==="Delivered").length;
+
+let list=data.filter(o=>
+(o.customer+" "+o.number+" "+o.product).toLowerCase().includes(search)&&
+(!filter||o.status===filter)
+);
+
+document.getElementById("orders").innerHTML=list.length?list.map(o=>`
+<div class="order">
+<h3>${escapeHTML(o.customer)}</h3>
+<p><b>Order:</b> ${escapeHTML(o.number)}</p>
+<p><b>Product:</b> ${escapeHTML(o.product)}</p>
+<p><b>Quantity:</b> ${o.quantity}</p>
+<p><b>Order date:</b> ${escapeHTML(o.date||"-")}</p>
+<p><b>Delivery date:</b> ${escapeHTML(o.deliveryDate||"-")}</p>
+<p><b>Payment:</b> ${o.payment}</p>
+<span class="badge">${escapeHTML(o.status)}</span><br>
+<button class="edit" onclick="editOrder(${o.id})">EDIT</button>
+<button class="delete" onclick="deleteOrder(${o.id})">DELETE</button>
+</div>
+`).join(""):"<p>No orders found.</p>";
+}
+
+function escapeHTML(value){
+return String(value).replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+}
+
+render();
+</script>
+
+</body>
+</html>
