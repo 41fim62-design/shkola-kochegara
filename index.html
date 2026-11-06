@@ -2,238 +2,360 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Garment Workshop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Школа кочегара</title>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f1f4f9;color:#222}
-header{background:#172554;color:white;padding:22px}
-header h2{margin:0}
-header p{margin:6px 0 0;color:#bfdbfe}
-.container{padding:15px;max-width:900px;margin:auto}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.card{background:white;padding:17px;border-radius:12px;box-shadow:0 2px 8px #0001}
-.card small{color:#64748b}
-.card h2{margin:10px 0 0;color:#1d4ed8}
-button{border:0;padding:12px;border-radius:8px;background:#2563eb;color:white;font-weight:bold;cursor:pointer}
-button:active{opacity:.7}
-.add{width:100%;margin:15px 0}
-input,select{width:100%;padding:13px;margin:7px 0 13px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
-label{font-size:13px;font-weight:bold}
-.order{background:white;padding:15px;border-radius:10px;margin:10px 0;box-shadow:0 2px 6px #0001}
-.order h3{margin:0 0 8px}
-.badge{display:inline-block;background:#dbeafe;color:#1e40af;padding:5px 9px;border-radius:15px;font-size:12px}
-.delete{background:#dc2626;margin-top:10px}
-.edit{background:#475569;margin-top:10px;margin-left:5px}
+body{
+ margin:0;
+ background:#101827;
+ color:#edf2f7;
+ font-family:Arial,sans-serif;
+}
+header{
+ background:#1e293b;
+ padding:22px;
+ border-bottom:2px solid #f59e0b;
+}
+header h1{margin:0;color:#fbbf24}
+header p{color:#cbd5e1;margin-bottom:0}
+main{max-width:850px;margin:auto;padding:15px}
+.card{
+ background:#1e293b;
+ padding:18px;
+ border-radius:13px;
+ margin:12px 0;
+}
+button{
+ border:0;
+ border-radius:9px;
+ padding:13px;
+ background:#f59e0b;
+ color:#111827;
+ font-weight:bold;
+ cursor:pointer;
+}
+.menu{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:10px;
+ margin:15px 0;
+}
+.menu button{
+ background:#334155;
+ color:white;
+ min-height:65px;
+}
+.menu button:active{background:#f59e0b}
+h2{color:#fbbf24}
+h3{color:#fbbf24}
+small{color:#94a3b8}
+.progress{
+ background:#334155;
+ height:12px;
+ border-radius:10px;
+ overflow:hidden;
+}
+.progress div{
+ background:#f59e0b;
+ height:100%;
+ width:0%;
+}
+.lesson{
+ background:#334155;
+ padding:15px;
+ border-radius:10px;
+ margin:10px 0;
+}
+.answer{
+ display:block;
+ width:100%;
+ margin:8px 0;
+ text-align:left;
+ background:#334155;
+ color:white;
+}
+input{
+ width:100%;
+ padding:13px;
+ border-radius:8px;
+ border:0;
+ margin:10px 0;
+}
 .hidden{display:none}
-.section{margin-top:20px}
-h3.title{margin-bottom:10px}
+.back{
+ background:#64748b;
+ color:white;
+ margin-bottom:12px;
+}
+footer{
+ text-align:center;
+ color:#64748b;
+ padding:25px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<h2>🧵 Garment Workshop</h2>
-<p>Order & Delivery Management</p>
+<h1>🔥 ШКОЛА КОЧЕГАРА</h1>
+<p>Профессиональное обучение оператора котельной</p>
 </header>
 
-<div class="container">
+<main>
 
-<div class="stats">
+<div id="home">
+
 <div class="card">
-<small>Total Orders</small>
-<h2 id="total">0</h2>
+<h2>Твой учебный прогресс</h2>
+<p>Пройдено уроков: <b id="done">0</b></p>
+<div class="progress"><div id="bar"></div></div>
+<p id="percent">0% обучения</p>
 </div>
+
+<h2>Учебные разделы</h2>
+
+<div class="menu">
+<button onclick="openSection('basics')">🏭 Устройство котельной</button>
+<button onclick="openSection('fuel')">🔥 Топливо и горение</button>
+<button onclick="openSection('equipment')">⚙️ Оборудование</button>
+<button onclick="openSection('automation')">💻 Автоматика</button>
+<button onclick="openSection('safety')">🚨 Безопасность</button>
+<button onclick="openSection('problems')">🔧 Неисправности</button>
+<button onclick="openSection('exam')">📝 Экзамен</button>
+<button onclick="openSection('dictionary')">📖 Словарь</button>
+</div>
+
 <div class="card">
-<small>In Production</small>
-<h2 id="production">0</h2>
-</div>
-<div class="card">
-<small>Completed</small>
-<h2 id="completed">0</h2>
-</div>
-<div class="card">
-<small>Delivered</small>
-<h2 id="delivered">0</h2>
-</div>
-</div>
-
-<button class="add" onclick="showForm()">+ ADD NEW ORDER</button>
-
-<div id="form" class="card hidden">
-<h3 id="formTitle">New Order</h3>
-
-<label>Customer Name</label>
-<input id="customer" placeholder="Customer name">
-
-<label>Order Number</label>
-<input id="number" placeholder="Order number">
-
-<label>Product</label>
-<input id="product" placeholder="T-shirt, trousers, etc.">
-
-<label>Quantity</label>
-<input id="quantity" type="number" min="1" placeholder="Quantity">
-
-<label>Order Date</label>
-<input id="date" type="date">
-
-<label>Delivery Date</label>
-<input id="deliveryDate" type="date">
-
-<label>Payment Amount</label>
-<input id="payment" type="number" min="0" placeholder="Amount">
-
-<label>Status</label>
-<select id="status">
-<option>New</option>
-<option>In Production</option>
-<option>Completed</option>
-<option>Delivered</option>
-</select>
-
-<button onclick="saveOrder()" style="width:100%">SAVE ORDER</button>
-<button onclick="hideForm()" style="width:100%;background:#64748b;margin-top:8px">CANCEL</button>
-</div>
-
-<div class="section">
-<h3 class="title">📋 Orders</h3>
-<input id="search" placeholder="🔍 Search orders..." oninput="render()">
-<select id="filter" onchange="render()">
-<option value="">All orders</option>
-<option>New</option>
-<option>In Production</option>
-<option>Completed</option>
-<option>Delivered</option>
-</select>
-<div id="orders"></div>
+<h3>🎯 Твоя цель</h3>
+<p>Стать грамотным специалистом, который понимает устройство котельной, принципы её работы и умеет распознавать неисправности.</p>
 </div>
 
 </div>
+
+<div id="content" class="hidden">
+<button class="back" onclick="home()">← На главную</button>
+<h2 id="sectionTitle"></h2>
+<div id="sectionContent"></div>
+</div>
+
+</main>
+
+<footer>
+Школа кочегара · Учись понимать свою котельную
+</footer>
 
 <script>
-let data=JSON.parse(localStorage.getItem("garmentOrders")||"[]");
-let editing=null;
 
-function save(){
-localStorage.setItem("garmentOrders",JSON.stringify(data));
+const lessons={
+
+basics:{
+title:"🏭 Устройство котельной",
+items:[
+["Что такое котельная",
+"Котельная — это комплекс оборудования, предназначенный для получения и передачи тепловой энергии теплоносителю. В водогрейной котельной нагревается вода, которая затем направляется потребителям."],
+["Водогрейный котёл",
+"Водогрейный котёл передаёт теплоту от сгорающего топлива воде. Основные элементы зависят от конструкции: топочная камера, поверхности нагрева, водяной тракт, газоходы и система удаления продуктов сгорания."],
+["Циркуляция воды",
+"Циркуляция обеспечивает движение теплоносителя через котёл и систему отопления. Для её поддержания применяются насосы. Нарушение циркуляции может привести к опасному перегреву оборудования."],
+["Тепловой баланс",
+"Тепловой баланс показывает, куда расходуется энергия топлива: на нагрев воды, потери с уходящими газами, химическую и механическую неполноту сгорания и другие потери."]
+]},
+
+fuel:{
+title:"🔥 Топливо и горение",
+items:[
+["Что такое горение",
+"Горение — это химическая реакция окисления топлива с выделением теплоты. Для устойчивого процесса необходимы горючее вещество, окислитель и достаточная температура."],
+["Каменный уголь",
+"Уголь содержит горючую часть, влагу, минеральные примеси и золу. Его характеристики влияют на теплотворность, расход топлива, количество золы и особенности горения."],
+["Первичный воздух",
+"Первичный воздух поступает в зону горения топлива. Его распределение и количество зависят от конструкции топки."],
+["Вторичный воздух",
+"Вторичный воздух участвует в дожигании летучих горючих компонентов. Конкретная схема подачи определяется конструкцией котла."],
+["Шлак и зола",
+"Зола представляет собой минеральный остаток после сгорания. Шлак образуется при спекании и плавлении минеральных компонентов топлива."]
+]},
+
+equipment:{
+title:"⚙️ Оборудование",
+items:[
+["Дутьевой вентилятор",
+"Подаёт воздух для процесса горения. Контролируются состояние вентилятора, электродвигателя, подшипников, воздуховодов и предусмотренных системой защит."],
+["Дымосос",
+"Обеспечивает удаление дымовых газов и участвует в создании необходимого разрежения в газовом тракте."],
+["Насос",
+"Обеспечивает перемещение воды по трубопроводам. Важные характеристики: производительность, напор, мощность и состояние оборудования."],
+["Транспортёр топлива",
+"Перемещает топливо к месту сжигания. Важны состояние ленты или цепи, приводов, роликов и защитных устройств."],
+["Система золоудаления",
+"Предназначена для удаления золы и шлака. Конструкция зависит от типа котельной и установленного оборудования."]
+]},
+
+automation:{
+title:"💻 Автоматика",
+items:[
+["Датчики температуры",
+"Измеряют температуру воды, газов и других сред. Показания используются системой контроля и регулирования."],
+["Датчики давления",
+"Контролируют давление в трубопроводах и оборудовании."],
+["Частотный преобразователь",
+"Изменяет частоту питания электродвигателя, позволяя регулировать скорость его вращения."],
+["Аварийная сигнализация",
+"Предупреждает персонал о выходе контролируемых параметров за установленные пределы или неисправностях."],
+["Блокировки",
+"Не позволяют выполнять определённые операции при наличии опасных условий. Самовольное отключение блокировок недопустимо."]
+]},
+
+safety:{
+title:"🚨 Охрана труда и безопасность",
+items:[
+["Средства индивидуальной защиты",
+"Используются спецодежда, защитная обувь, каска, перчатки, очки и другие СИЗ согласно оценке рисков и требованиям предприятия."],
+["Угарный газ",
+"Угарный газ CO не имеет цвета и запаха. Он крайне токсичен. При подозрении на его присутствие необходимо действовать по аварийному плану предприятия и не подвергать себя опасности."],
+["Работа с вращающимися механизмами",
+"Запрещается снимать ограждения или приближаться к движущимся частям. Ремонт и очистка выполняются после безопасной остановки, изоляции источников энергии и оформления допуска, если он требуется."],
+["Аварийная ситуация",
+"При угрозе жизни, пожаре, утечке или отказе защит необходимо действовать по утверждённым инструкциям, сообщить ответственному лицу и вызвать экстренные службы при необходимости."]
+]},
+
+problems:{
+title:"🔧 Диагностика неисправностей",
+items:[
+["Частотник показывает ошибку",
+"Запиши точный код ошибки, модель преобразователя и обстоятельства появления. Сверь код с руководством производителя. Не сбрасывай защиту без выяснения причины."],
+["Перегрев электродвигателя",
+"Возможные причины: перегрузка, нарушение охлаждения, неисправность подшипников, проблемы питания. Диагностику должен выполнять квалифицированный персонал."],
+["Падение давления воды",
+"Возможные причины: утечка, нарушение подпитки, неисправность насоса или датчика. Необходимо руководствоваться аварийной инструкцией конкретной котельной."],
+["Нарушение тяги",
+"Возможные причины: засорение газохода, неисправность дымососа, нарушение герметичности или проблемы с датчиками. Эксплуатацию при опасных параметрах необходимо прекратить согласно инструкции."]
+]},
+
+dictionary:{
+title:"📖 Профессиональный словарь",
+items:[
+["Тяга","Движение дымовых газов под действием разности давлений."],
+["Разрежение","Давление ниже атмосферного."],
+["КПД","Отношение полезно использованной энергии к затраченной."],
+["Теплотворность","Количество теплоты, выделяемое при полном сгорании единицы топлива."],
+["Колосниковая решётка","Элемент топочного устройства, поддерживающий слой твёрдого топлива."],
+["Золоудаление","Процесс удаления золы из котельного оборудования."],
+["Частотник","Разговорное название частотного преобразователя."],
+["Теплоноситель","Среда, переносящая тепловую энергию, например вода."]
+]}
+};
+
+let completed=JSON.parse(localStorage.getItem("schoolDone")||"[]");
+
+function updateProgress(){
+let total=Object.values(lessons).reduce((a,s)=>a+s.items.length,0);
+let count=completed.length;
+document.getElementById("done").innerText=count;
+document.getElementById("bar").style.width=(count/total*100)+"%";
+document.getElementById("percent").innerText=Math.round(count/total*100)+"% обучения";
 }
 
-function showForm(){
-editing=null;
-clearForm();
-document.getElementById("formTitle").innerText="New Order";
-document.getElementById("form").classList.remove("hidden");
+function home(){
+document.getElementById("home").classList.remove("hidden");
+document.getElementById("content").classList.add("hidden");
+updateProgress();
 }
 
-function hideForm(){
-document.getElementById("form").classList.add("hidden");
-}
+function openSection(key){
+let section=lessons[key];
+document.getElementById("home").classList.add("hidden");
+document.getElementById("content").classList.remove("hidden");
+document.getElementById("sectionTitle").innerText=section.title;
 
-function clearForm(){
-["customer","number","product","quantity","date","deliveryDate","payment"].forEach(id=>{
-document.getElementById(id).value="";
+let html="";
+
+if(key==="exam"){
+html=`
+<div class="card">
+<h3>Проверка знаний</h3>
+<p>Ответь на вопросы и проверь свои знания.</p>
+<button onclick="startExam()" style="width:100%">НАЧАТЬ ЭКЗАМЕН</button>
+<div id="examArea"></div>
+</div>`;
+}else{
+section.items.forEach((item,i)=>{
+let id=key+"_"+i;
+html+=`
+<div class="lesson">
+<h3>${item[0]}</h3>
+<p>${item[1]}</p>
+${completed.includes(id)
+?'<button disabled>✓ Изучено</button>'
+:`<button onclick="markDone('${id}',this)">Отметить изученным</button>`}
+</div>`;
 });
-document.getElementById("status").value="New";
 }
 
-function saveOrder(){
-let customer=document.getElementById("customer").value.trim();
-let number=document.getElementById("number").value.trim();
-let product=document.getElementById("product").value.trim();
-let quantity=Number(document.getElementById("quantity").value);
+document.getElementById("sectionContent").innerHTML=html;
+}
 
-if(!customer||!number||!product||quantity<=0){
-alert("Please fill in all required fields!");
+function markDone(id,button){
+if(!completed.includes(id)){
+completed.push(id);
+localStorage.setItem("schoolDone",JSON.stringify(completed));
+button.innerText="✓ Изучено";
+button.disabled=true;
+updateProgress();
+}
+}
+
+const questions=[
+["Что обеспечивает циркуляцию воды в системе?","Насос","Дымосос","Транспортёр",0],
+["Для чего нужен дутьевой вентилятор?","Для подачи воздуха","Для нагрева воды","Для удаления золы",0],
+["Что такое CO?","Углекислый газ","Угарный газ","Кислород",1],
+["Для чего нужен частотный преобразователь?","Изменение скорости двигателя","Измерение температуры","Очистка воды",0],
+["Что такое КПД?","Коэффициент полезного действия","Контроль давления","Количество топлива",0],
+["Что следует сделать при появлении аварийной ошибки?","Отключить защиту","Игнорировать","Действовать по инструкции и выяснить причину",2],
+["Что такое разрежение?","Давление ниже атмосферного","Высокая температура","Расход воды",0]
+];
+
+let current=0;
+let score=0;
+
+function startExam(){
+current=0;
+score=0;
+showQuestion();
+}
+
+function showQuestion(){
+let area=document.getElementById("examArea");
+if(current>=questions.length){
+area.innerHTML=`
+<h3>Экзамен завершён!</h3>
+<p>Правильных ответов: ${score} из ${questions.length}</p>
+<p>${score>=6?"Отличный результат!":"Нужно повторить материал."}</p>
+<button onclick="startExam()">Пройти ещё раз</button>`;
 return;
 }
 
-let order={
-id:editing!==null?editing:Date.now(),
-customer,
-number,
-product,
-quantity,
-date:document.getElementById("date").value,
-deliveryDate:document.getElementById("deliveryDate").value,
-payment:Number(document.getElementById("payment").value)||0,
-status:document.getElementById("status").value
-};
-
-if(editing!==null){
-let index=data.findIndex(x=>x.id===editing);
-data[index]=order;
-}else{
-data.unshift(order);
+let q=questions[current];
+area.innerHTML=`
+<h3>Вопрос ${current+1} из ${questions.length}</h3>
+<p>${q[0]}</p>
+${[q[1],q[2],q[3]].map((a,i)=>
+`<button class="answer" onclick="answer(${i})">${a}</button>`
+).join("")}
+`;
 }
 
-save();
-render();
-hideForm();
-clearForm();
+function answer(n){
+if(n===questions[current][4])score++;
+current++;
+showQuestion();
 }
 
-function editOrder(id){
-let o=data.find(x=>x.id===id);
-if(!o)return;
-editing=id;
-document.getElementById("formTitle").innerText="Edit Order";
-["customer","number","product","quantity","date","deliveryDate","payment","status"].forEach((key)=>{
-let field=key==="deliveryDate"?"deliveryDate":key;
-document.getElementById(field).value=o[key]??"";
-});
-document.getElementById("form").classList.remove("hidden");
-window.scrollTo(0,0);
-}
+updateProgress();
 
-function deleteOrder(id){
-if(confirm("Delete this order?")){
-data=data.filter(x=>x.id!==id);
-save();
-render();
-}
-}
-
-function render(){
-let search=document.getElementById("search").value.toLowerCase();
-let filter=document.getElementById("filter").value;
-
-document.getElementById("total").innerText=data.length;
-document.getElementById("production").innerText=data.filter(x=>x.status==="In Production").length;
-document.getElementById("completed").innerText=data.filter(x=>x.status==="Completed").length;
-document.getElementById("delivered").innerText=data.filter(x=>x.status==="Delivered").length;
-
-let list=data.filter(o=>
-(o.customer+" "+o.number+" "+o.product).toLowerCase().includes(search)&&
-(!filter||o.status===filter)
-);
-
-document.getElementById("orders").innerHTML=list.length?list.map(o=>`
-<div class="order">
-<h3>${escapeHTML(o.customer)}</h3>
-<p><b>Order:</b> ${escapeHTML(o.number)}</p>
-<p><b>Product:</b> ${escapeHTML(o.product)}</p>
-<p><b>Quantity:</b> ${o.quantity}</p>
-<p><b>Order date:</b> ${escapeHTML(o.date||"-")}</p>
-<p><b>Delivery date:</b> ${escapeHTML(o.deliveryDate||"-")}</p>
-<p><b>Payment:</b> ${o.payment}</p>
-<span class="badge">${escapeHTML(o.status)}</span><br>
-<button class="edit" onclick="editOrder(${o.id})">EDIT</button>
-<button class="delete" onclick="deleteOrder(${o.id})">DELETE</button>
-</div>
-`).join(""):"<p>No orders found.</p>";
-}
-
-function escapeHTML(value){
-return String(value).replace(/[&<>"']/g,c=>({
-"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-}[c]));
-}
-
-render();
 </script>
-
 </body>
 </html>
